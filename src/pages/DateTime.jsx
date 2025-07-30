@@ -7,7 +7,8 @@ const DateTime = () => {
   const [selectedTime, setSelectedTime] = useState(null);
 
   return (
-    <div className="mt-12 bg-gradient-to-r from-[#250d1f] to-[#1d1a20] p-6 rounded-xl">      
+    <div className="mt-12 bg-gradient-to-r from-[#250d1f] to-[#1d1a20] p-6 rounded-xl">
+      <h3 className="text-sm font-semibold mb-4">Choose Date</h3>
       <div className="flex flex-wrap gap-3 mb-6">
         {Object.keys(dummyDateTimeData).map((dateStr) => {
           const dateObj = new Date(dateStr);
@@ -34,7 +35,6 @@ const DateTime = () => {
           const time = new Date(show.time);
           return (
             <button
-            disabled={!selectedTime}
               key={show.showId}
               onClick={() => setSelectedTime(show.showId)}
               className={`px-4 py-2 rounded-md text-sm ${
@@ -46,6 +46,7 @@ const DateTime = () => {
           );
         })}
       </div>
+
     </div>
   );
 };
