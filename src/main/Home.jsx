@@ -9,13 +9,12 @@ const Home = () => {
   return (
     <div>
         <div className='bg-amber-400 text-white'
-      style={backroundImage ? { backgroundImage: `url(${backroundImage})` } : {}}>
-      <Navbar/>
+      style={backroundImage ? { backgroundImage: `url(${backroundImage})` } : {}}>      
       <Hero/>
       </div>
       <NowShowing/>
       <Trailers/>
-      <Footer/>
+      
     </div>
   )
 }
