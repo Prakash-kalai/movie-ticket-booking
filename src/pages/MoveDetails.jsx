@@ -62,8 +62,8 @@ const MovieDetails = () => {
        <div className="mt-12 bg-gradient-to-r from-[rgb(37,13,31)] to-[#1d1a20] p-6 rounded-xl">
         <h3 className="text-sm font-semibold text-white mb-4">Choose Date</h3>
         <div className="flex items-center gap-4">
-          <DateTime/>
-          <button className="ml-auto bg-pink-600 text-white px-6 py-2 rounded-full">Book Now</button>
+          <DateTime id={id}/>
+          
         </div>
       </div>
     </section>

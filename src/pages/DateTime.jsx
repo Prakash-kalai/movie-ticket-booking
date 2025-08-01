@@ -1,10 +1,14 @@
 import { dummyDateTimeData } from "../assets/assets/"; 
 import { useState } from "react";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
-const DateTime = () => {
+const DateTime = ({id}) => {
   const [selectedDate, setSelectedDate] = useState(Object.keys(dummyDateTimeData)[0]);
   const [selectedTime, setSelectedTime] = useState(null);
+  
+  
+  const navigate=useNavigate();
 
   return (
     <div className="mt-12 bg-gradient-to-r from-[#250d1f] to-[#1d1a20] p-6 rounded-xl">
@@ -46,7 +50,8 @@ const DateTime = () => {
           );
         })}
       </div>
-
+<button className="ml-auto bg-pink-600 text-white px-6 py-2 rounded-full"
+onClick={()=>navigate(`/movies/${id}/${selectedDate}`)}>Book Now</button>
     </div>
   );
 };

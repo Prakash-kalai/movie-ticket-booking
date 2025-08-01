@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/First_Layer1/Navbar'
 import Footer from './components/First_Layer1/Footer'
 import MovieDetails from './pages/MoveDetails'
+import SeatSelector from './pages/SeatSelector'
 
 const App = () => {
   return (
@@ -15,6 +16,8 @@ const App = () => {
           <Route path="/" element={<Home />} />   
           <Route path="/movies" element={<Movies />}/>          
           <Route path="/movies/:id" element={<MovieDetails />}/>          
+          <Route path="/movies/:id/:date" element={<SeatSelector />} />
+
         </Routes>      
         <Footer/>
     </div>
