@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component for individual seats
-
+import  { addBooking, addUpdte } from "../redux/bookingTicket/bookingSlice";
+import { useDispatch } from "react-redux"; 
 const SeatSelector = () => {
   const timings = ["06:30", "09:30", "12:00", "04:30", "08:00"];
   const [selectedTime, setSelectedTime] = useState(timings[0]);
   const rows = ["A", "B", "C", "D", "E", "F", "G"];
   const cols = 18;
-
+const dispatch=useDispatch()
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  const toggleSeat = (seatId) => {
+  const toggleSeat = (seatId) => {    
     setSelectedSeats((prev) =>
       prev.includes(seatId)
         ? prev.filter((s) => s !== seatId)
@@ -17,7 +18,15 @@ const SeatSelector = () => {
     );
   };
   console.log(selectedSeats,selectedTime);
-  
+  const handleSubmit=()=>{
+    const update={
+      time:selectedTime,
+      seates:selectedSeats,
+      tickets: selectedSeats.length
+      
+    };
+    dispatch(addUpdte(update));
+  }
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
@@ -65,7 +74,8 @@ const SeatSelector = () => {
             ))}
           </div>
 
-          <button className="mt-8 px-6 py-2 bg-pink-500 rounded-full text-sm hover:bg-pink-600 transition">
+          <button className="mt-8 px-6 py-2 bg-pink-500 rounded-full text-sm hover:bg-pink-600 transition"
+          onClick={handleSubmit}>
             Proceed to checkout →
           </button>
         </div>

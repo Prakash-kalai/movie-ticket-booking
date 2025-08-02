@@ -4,13 +4,14 @@ import { dummyShowsData } from "../assets/assets";
 import DateTime from "./DateTime";
 import MovieCard from "./MovieCard";
 const MovieDetails = () => {
+  
   const { id } = useParams();
   const data = dummyShowsData.find((e) => String(e.id) === id);
 
   if (!data) {
     return <div className="text-center text-red-500 mt-10">Movie not found</div>;
   }
-
+  
   return (
     <div className="w-[90%] m-auto flex flex-col gap-15">
     <section className="flex flex-col md:flex-row gap-8 p-6">

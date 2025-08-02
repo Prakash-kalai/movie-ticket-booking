@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Home from './main/Home'
 import Movies from './main/Movies'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -7,8 +7,18 @@ import Footer from './components/First_Layer1/Footer'
 import MovieDetails from './pages/MoveDetails'
 import SeatSelector from './pages/SeatSelector'
 import MyBookings from './pages/MyBooking'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllData } from './redux/bookingTicket/bookingSlice'
 
 const App = () => {
+  const dispatch=useDispatch()
+  const data=useSelector((state)=>state.booking.bookings)
+  console.log(data);
+  
+  useEffect(()=>{
+    getAllData();
+  },[dispatch])
+  
   return (
     <BrowserRouter>
     <div className='bg-black'>            

@@ -2,11 +2,27 @@ import { dummyDateTimeData } from "../assets/assets/";
 import { useState } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { addBooking } from "../redux/bookingTicket/bookingSlice";
+import { useDispatch  } from "react-redux";
 
 const DateTime = ({id}) => {
   const [selectedDate, setSelectedDate] = useState(Object.keys(dummyDateTimeData)[0]);
   const [selectedTime, setSelectedTime] = useState(null);
-  
+  const dispatch=useDispatch();
+  const bookingTicket=()=>{
+    if (!selectedTime) {
+      alert("Please select a time slot");
+      return;
+    }
+    const bookingDetails = {
+      movieId: id,
+      date: selectedDate,
+      time: selectedTime,      
+    };
+    dispatch(addBooking(bookingDetails));
+    navigate(`/movies/${id}/${selectedDate}`)
+    console.log("Booking Details:", bookingDetails);  
+  }
   
   const navigate=useNavigate();
 
@@ -43,7 +59,7 @@ const DateTime = ({id}) => {
               onClick={() => setSelectedTime(show.showId)}
               className={`px-4 py-2 rounded-md text-sm ${
                 selectedTime === show.showId ? "bg-pink-600 text-white" : "bg-gray-700 text-gray-300"
-              }`}
+              }`} 
             >
               {format(time, "hh:mm a")}
             </button>
@@ -51,7 +67,7 @@ const DateTime = ({id}) => {
         })}
       </div>
 <button className="ml-auto bg-pink-600 text-white px-6 py-2 rounded-full"
-onClick={()=>navigate(`/movies/${id}/${selectedDate}`)}>Book Now</button>
+onClick={()=>bookingTicket()}>Book Now</button>
     </div>
   );
 };
