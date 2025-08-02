@@ -17,6 +17,9 @@ const Navbar = () => {
         </li>
         <li>Theatres</li>
         <li>Releases</li>
+        <li>
+          <Link to={"/movies/my-booking"}>Favorites</Link>
+        </li>
       </ul>
       <button className="bg-pink-500 text-white px-4 py-1 rounded-full hover:bg-pink-600">
         Log in
