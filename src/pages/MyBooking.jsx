@@ -1,16 +1,19 @@
 import React from "react";
-
-const bookings = [
-  {
-    id: 1,
-    title: "Alita Battle Angel 2024",
-    duration: "2 hours 5 minutes",
-    dateTime: "13th May 2025 - 5:00 PM",
-    amount: "₹700",
-    tickets: 2,
-    seats: ["B12", "B13"],
-    image: "https://i.imgur.com/z7bZGZL.jpeg", // Replace with your actual movie image
-  },
+import { useEffect } from "react";
+import { getAllData,getAllBookingData } from "../redux/bookingTicket/bookingSlice";
+import { useSelector, useDispatch } from "react-redux";
+const Bookings = [
+    {
+      id: 1,
+      title: "Alita Battle Angel 2024",
+      duration: "2 hours 5 minutes",
+      dateTime: "13th May 2025 - 5:00 PM",
+      amount: "₹700",
+      tickets: 2,
+      seats: ["B12", "B13"],
+      image: "https://i.imgur.com/z7bZGZL.jpeg", // Replace with your actual movie image
+      //userId:"3k3jj23dkd32"
+    },
   {
     id: 2,
     title: "Alita Battle Angel 2024",
@@ -20,6 +23,7 @@ const bookings = [
     tickets: 2,
     seats: ["B12", "B13"],
     image: "https://i.imgur.com/z7bZGZL.jpeg",
+    //userId:"3k3jj23dkd32"
   },
 ];
 
@@ -53,6 +57,23 @@ const BookingCard = ({ booking }) => (
 );
 
 const MyBookings = () => {
+  const dispatch = useDispatch();
+  const bookings = useSelector((state) => state?.booking?.bookings) || Bookings;
+  const loading = useSelector((state) => state.booking.loading);
+  const error = useSelector((state) => state.booking.error);
+  useEffect(() => {
+    dispatch(getAllData());
+  }, [dispatch]);
+  if (loading) {
+    return <div className="text-white text-center">Loading...</div>;
+  } if (error) {
+    return <div className="text-red-500 text-center">Error: {error}</div>;
+  }
+  if (bookings.length === 0) {
+    return <div className="text-white text-center">No bookings found.</div>;
+  }
+  
+
   return (
     <section className="min-h-screen bg-black px-6 py-10">
       <h2 className="text-white text-xl font-semibold mb-6">My Bookings</h2>

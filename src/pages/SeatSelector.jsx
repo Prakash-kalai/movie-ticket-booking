@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component for individual seats
-import  { addBooking, addUpdte } from "../redux/bookingTicket/bookingSlice";
+import  { addBooking, addBookingServer, addUpdte } from "../redux/bookingTicket/bookingSlice";
 import { useDispatch } from "react-redux"; 
 const SeatSelector = () => {
   const timings = ["06:30", "09:30", "12:00", "04:30", "08:00"];
   const [selectedTime, setSelectedTime] = useState(timings[0]);
   const rows = ["A", "B", "C", "D", "E", "F", "G"];
   const cols = 18;
-const dispatch=useDispatch()
+  const dispatch=useDispatch()
   const [selectedSeats, setSelectedSeats] = useState([]);
 
   const toggleSeat = (seatId) => {    
@@ -25,6 +25,7 @@ const dispatch=useDispatch()
       tickets: selectedSeats.length
       
     };
+    dispatch(addBookingServer(update));
     dispatch(addUpdte(update));
   }
 

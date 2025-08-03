@@ -1,47 +1,62 @@
-import { dummyDateTimeData } from "../assets/assets/"; 
 import { useState } from "react";
-import { format } from "date-fns";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addBooking } from "../redux/bookingTicket/bookingSlice";
-import { useDispatch  } from "react-redux";
+import { format } from "date-fns";
 
-const DateTime = ({id}) => {
+import { dummyDateTimeData } from "../assets/assets/";
+import { addBooking, addBookingServer } from "../redux/bookingTicket/bookingSlice";
+
+const DateTime = ({ id }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [selectedDate, setSelectedDate] = useState(Object.keys(dummyDateTimeData)[0]);
   const [selectedTime, setSelectedTime] = useState(null);
-  const dispatch=useDispatch();
-  const bookingTicket=()=>{
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    setSelectedTime(null);
+  };
+
+  const handleTimeSelect = (showId) => {
+    setSelectedTime(showId);
+  };
+
+  const handleBooking = () => {
     if (!selectedTime) {
       alert("Please select a time slot");
       return;
     }
+
     const bookingDetails = {
       movieId: id,
       date: selectedDate,
-      time: selectedTime,      
+      time: selectedTime,
     };
+    console.log(bookingDetails);
+    
+    // Optionally, you can also dispatch the addBooking action if you want to update the state immediately
+    dispatch(addBookingServer(bookingDetails));
     dispatch(addBooking(bookingDetails));
-    navigate(`/movies/${id}/${selectedDate}`)
-    console.log("Booking Details:", bookingDetails);  
-  }
-  
-  const navigate=useNavigate();
+    navigate(`/movies/${id}/${selectedDate}`);
+  };
 
   return (
-    <div className="mt-12 bg-gradient-to-r from-[#250d1f] to-[#1d1a20] p-6 rounded-xl">
+    <div className="mt-12 p-6 rounded-xl bg-gradient-to-r from-[#250d1f] to-[#1d1a20]">
+      {/* Date Selection */}
       <h3 className="text-sm font-semibold mb-4">Choose Date</h3>
       <div className="flex flex-wrap gap-3 mb-6">
         {Object.keys(dummyDateTimeData).map((dateStr) => {
           const dateObj = new Date(dateStr);
+          const isSelected = selectedDate === dateStr;
+
           return (
             <button
               key={dateStr}
-              onClick={() => {
-                setSelectedDate(dateStr);
-                setSelectedTime(null);
-              }}
-              className={`px-4 py-2 rounded-md text-sm ${
-                selectedDate === dateStr ? "bg-pink-600 text-white" : "bg-gray-800 text-gray-300"
-              }`}
+              onClick={() => handleDateSelect(dateStr)}
+              className={`px-4 py-2 rounded-md text-sm transition-colors duration-200
+                ${isSelected ? "bg-pink-600 text-white" : "bg-gray-800 text-gray-300"}
+              `}
             >
               {format(dateObj, "EEE dd")}
             </button>
@@ -49,25 +64,42 @@ const DateTime = ({id}) => {
         })}
       </div>
 
-      {/* Show time buttons */}
-      <div className="flex flex-wrap gap-3 mb-4">
-        {dummyDateTimeData[selectedDate].map((show) => {
-          const time = new Date(show.time);
-          return (
-            <button
-              key={show.showId}
-              onClick={() => setSelectedTime(show.showId)}
-              className={`px-4 py-2 rounded-md text-sm ${
-                selectedTime === show.showId ? "bg-pink-600 text-white" : "bg-gray-700 text-gray-300"
-              }`} 
-            >
-              {format(time, "hh:mm a")}
-            </button>
-          );
-        })}
+      {/* Time Slot Selection */}
+      <h3 className="text-sm font-semibold mb-4">Choose Time</h3>
+      <div className="flex flex-wrap gap-3 mb-6">
+        {['6:30', '8:30', '10:00'].map((show) => {
+  // Parse time string into a Date object for formatting
+  const [hours, minutes] = show.split(':');
+  const showTime = new Date();
+  showTime.setHours(Number(hours));
+  showTime.setMinutes(Number(minutes));
+  showTime.setSeconds(0);
+
+  const isSelected = selectedTime === show;
+
+  return (
+    <button
+      key={show}
+      onClick={() => handleTimeSelect(show)}
+      className={`px-4 py-2 rounded-md text-sm transition-colors duration-200
+        ${isSelected ? "bg-pink-600 text-white" : "bg-gray-700 text-gray-300"}
+      `}
+    >
+      {format(showTime, "hh:mm a")}
+    </button>
+  );
+})}
       </div>
-<button className="ml-auto bg-pink-600 text-white px-6 py-2 rounded-full"
-onClick={()=>bookingTicket()}>Book Now</button>
+
+      {/* Book Now Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleBooking}
+          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-full transition duration-200"
+        >
+          Book Now
+        </button>
+      </div>
     </div>
   );
 };

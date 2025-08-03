@@ -4,8 +4,7 @@ import React from "react";
 const Hero = () => {
   return (
     <section
-      className="relative h-[600px] bg-cover bg-center"
-      
+      className="relative h-[600px] bg-cover bg-center"      
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent p-10 flex flex-col justify-center space-y-4">
         <h2 className="text-lg text-red-500 font-semibold">MARVEL STUDIOS</h2>
