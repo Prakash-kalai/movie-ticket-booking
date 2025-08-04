@@ -47,7 +47,7 @@ const bookingSlice = createSlice({
         const index = state.bookings.findIndex(b => b.id === newBooking.id);
 
         if (index !== -1) {    
-             state.bookings[index] = { ...state.bookings[index], ...newBooking };
+             state.bookings[index] = {...state.bookings[index], ...newBooking };
         } else {    
             state.bookings.push(newBooking);
     }               

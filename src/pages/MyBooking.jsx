@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { getAllData,getAllBookingData } from "../redux/bookingTicket/bookingSlice";
 import { useSelector, useDispatch } from "react-redux";
-const Bookings = [
+const bookings = [
     {
       id: 1,
       title: "Alita Battle Angel 2024",
@@ -58,7 +58,7 @@ const BookingCard = ({ booking }) => (
 
 const MyBookings = () => {
   const dispatch = useDispatch();
-  const bookings = useSelector((state) => state?.booking?.bookings) || Bookings;
+  //const bookings = useSelector((state) => state?.booking?.bookings)  Bookings;
   const loading = useSelector((state) => state.booking.loading);
   const error = useSelector((state) => state.booking.error);
   useEffect(() => {

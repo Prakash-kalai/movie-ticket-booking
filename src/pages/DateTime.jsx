@@ -5,8 +5,12 @@ import { format } from "date-fns";
 
 import { dummyDateTimeData } from "../assets/assets/";
 import { addBooking, addBookingServer } from "../redux/bookingTicket/bookingSlice";
+import { dummyShowsData } from "../assets/assets";
 
-const DateTime = ({ id }) => {
+const DateTime = ({ id,data }) => {
+  
+  console.log(data);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,10 +36,10 @@ const DateTime = ({ id }) => {
       movieId: id,
       date: selectedDate,
       time: selectedTime,
+      duration: Math.floor(data.runtime / 60)+'h'+ data?.runtime % 60+'m •'+" ",
+      title: data?.title || "Unknown Movie",      
     };
-    console.log(bookingDetails);
-    
-    // Optionally, you can also dispatch the addBooking action if you want to update the state immediately
+    console.log(bookingDetails);      
     dispatch(addBookingServer(bookingDetails));
     dispatch(addBooking(bookingDetails));
     navigate(`/movies/${id}/${selectedDate}`);

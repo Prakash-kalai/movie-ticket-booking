@@ -63,7 +63,7 @@ const MovieDetails = () => {
        <div className="mt-12 bg-gradient-to-r from-[rgb(37,13,31)] to-[#1d1a20] p-6 rounded-xl">
         <h3 className="text-sm font-semibold text-white mb-4">Choose Date</h3>
         <div className="flex items-center gap-4">
-          <DateTime id={id}/>
+          <DateTime id={id} data={data}/>
           
         </div>
       </div>
