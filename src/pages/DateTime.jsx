@@ -40,8 +40,8 @@ const DateTime = ({ id,data }) => {
       title: data?.title || "Unknown Movie",      
     };
     console.log(bookingDetails);      
-    dispatch(addBookingServer(bookingDetails));
-    dispatch(addBooking(bookingDetails));
+    //dispatch(addBookingServer(bookingDetails));
+    //dispatch(addBooking(bookingDetails));
     navigate(`/movies/${id}/${selectedDate}`);
   };
 

@@ -1,5 +1,6 @@
 import { createSlice ,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
+import { Immer } from "immer";
 // Define an initial state for the booking slice
 // This state will hold the bookings data
 const initialState = {
@@ -42,16 +43,21 @@ const bookingSlice = createSlice({
     addBooking: (state, action) => {
         state.bookings.push(action.payload);
         },
-    addUpdte:(state,action)=>{
-        const newBooking = action.payload;
-        const index = state.bookings.findIndex(b => b.id === newBooking.id);
+addUpdte: (state, action) => {
+  const newBooking = action.payload;
+  console.log(action.payload);
+  
+  const index = state.bookings?.findIndex(b => b._id === newBooking?._id);
+  console.log(index,'dsd');
 
-        if (index !== -1) {    
-             state.bookings[index] = {...state.bookings[index], ...newBooking };
-        } else {    
-            state.bookings.push(newBooking);
-    }               
-    }
+  if (index !== -1) {
+    // Replace the existing booking with the new one
+    state.bookings[index] = newBooking;
+  } else {    
+    state.bookings.push(newBooking);
+  }
+  console.log(state.bookings);
+}
     },
   extraReducers: (builder) => {
     builder
