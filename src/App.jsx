@@ -8,16 +8,12 @@ import MovieDetails from './pages/MoveDetails'
 import SeatSelector from './pages/SeatSelector'
 import MyBookings from './pages/MyBooking'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllData } from './redux/bookingTicket/bookingSlice'
+
 
 const App = () => {
   const dispatch=useDispatch()
   const data=useSelector((state)=>state.booking.bookings)
   console.log(data);
-  
-  useEffect(()=>{
-    getAllData();
-  },[dispatch])
   
   return (
     <BrowserRouter>

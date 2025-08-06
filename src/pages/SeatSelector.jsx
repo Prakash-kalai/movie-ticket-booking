@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Seat from "./Seat"; // Component shown below
-import {
-  addBookingServer,
-  addUpdte,
-  getAllData,
-} from "../redux/bookingTicket/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { addBookingSeat } from "../redux/bookingTicket/bookingSlice";
 
 const SeatSelector = () => {
+  const { id } = useParams();    
   const timings = ["06:30", "09:30", "12:00", "16:30", "20:00"];
   const dispatch = useDispatch();
   const data = useSelector((state) => state.booking.bookings);
-
-  useEffect(() => {
-    dispatch(getAllData());
-  }, [dispatch]);
-console.log(data);
 
   const [selectedTime, setSelectedTime] = useState(timings[0]);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -34,16 +27,8 @@ console.log(data);
     if (selectedSeats.length === 0) {
       alert("Please select at least one seat.");
       return;
-    }
-
-    const update = {
-      time: selectedTime,
-      seats: selectedSeats,
-      tickets: selectedSeats.length,
-    };
-    console.log(update);    
-    dispatch(addBookingServer(update));
-    dispatch(addUpdte(update));
+    }        
+    dispatch(addBookingSeat({id,selectedSeats}));
     setSelectedSeats([]);
   };
 console.log(data);

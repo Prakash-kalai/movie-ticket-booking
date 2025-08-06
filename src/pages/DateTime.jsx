@@ -2,15 +2,11 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-
+import { addBookingServer } from "../redux/bookingTicket/bookingSlice";
 import { dummyDateTimeData } from "../assets/assets/";
-import { addBooking, addBookingServer } from "../redux/bookingTicket/bookingSlice";
-import { dummyShowsData } from "../assets/assets";
 
 const DateTime = ({ id,data }) => {
-  
-  console.log(data);
-  
+      
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,8 +36,7 @@ const DateTime = ({ id,data }) => {
       title: data?.title || "Unknown Movie",      
     };
     console.log(bookingDetails);      
-    //dispatch(addBookingServer(bookingDetails));
-    //dispatch(addBooking(bookingDetails));
+    dispatch(addBookingServer(bookingDetails));    
     navigate(`/movies/${id}/${selectedDate}`);
   };
 

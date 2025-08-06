@@ -1,6 +1,6 @@
 import { createSlice ,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
-import { Immer } from "immer";
+
 // Define an initial state for the booking slice
 // This state will hold the bookings data
 const initialState = {
@@ -14,11 +14,27 @@ export const addBookingServer = createAsyncThunk(
   async (bookingData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:3000/api/bookings/bookingTicket', bookingData);
+      console.log(response.data);      
       return response.data; // Return the booking data
     } catch (error) {
       return rejectWithValue(error.response.data); // Handle error
     }
   }
+);
+
+export const addBookingSeat = createAsyncThunk(
+  'booking/addBookingSeat',
+  async ({id,seat}, { rejectWithValue }) => {
+    try {
+      console.log(seat);
+      
+      const response = await axios.post(`http://localhost:3000/api/bookings/bookingTicket/${id}`,seat);
+      console.log(response.data);      
+      return response.data; // Return the booking data
+    } catch (error) {
+      return rejectWithValue(error.response.data); // Handle error
+    }
+  } 
 );
 //get all booking data
 export const getAllBookingData = createAsyncThunk(
@@ -34,31 +50,9 @@ export const getAllBookingData = createAsyncThunk(
 );  
 
 const bookingSlice = createSlice({
-  name: "booking",
+    name: "booking",
     initialState,    
-    reducers: {
-    getAllData:(state,action)=>{
-        return state.bookings;
-    },
-    addBooking: (state, action) => {
-        state.bookings.push(action.payload);
-        },
-addUpdte: (state, action) => {
-  const newBooking = action.payload;
-  console.log(action.payload);
-  
-  const index = state.bookings?.findIndex(b => b._id === newBooking?._id);
-  console.log(index,'dsd');
-
-  if (index !== -1) {
-    // Replace the existing booking with the new one
-    state.bookings[index] = newBooking;
-  } else {    
-    state.bookings.push(newBooking);
-  }
-  console.log(state.bookings);
-}
-    },
+    reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addBookingServer.pending, (state) => {
@@ -79,14 +73,13 @@ addUpdte: (state, action) => {
       })
       .addCase(getAllBookingData.fulfilled, (state, action) => {
         state.loading = false;
-        state.bookings = action.payload; // Update bookings with fetched data
+        state.bookings = action.payload; 
       })
       .addCase(getAllBookingData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Handle error
+        state.error = action.payload;
       })
   }
 }); 
 
-export const {getAllData, addBooking ,addUpdte} = bookingSlice.actions;
 export default bookingSlice.reducer;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { getAllData,getAllBookingData } from "../redux/bookingTicket/bookingSlice";
+
 import { useSelector, useDispatch } from "react-redux";
 const bookings = [
     {
@@ -61,9 +61,6 @@ const MyBookings = () => {
   //const bookings = useSelector((state) => state?.booking?.bookings)  Bookings;
   const loading = useSelector((state) => state.booking.loading);
   const error = useSelector((state) => state.booking.error);
-  useEffect(() => {
-    dispatch(getAllData());
-  }, [dispatch]);
   if (loading) {
     return <div className="text-white text-center">Loading...</div>;
   } if (error) {
