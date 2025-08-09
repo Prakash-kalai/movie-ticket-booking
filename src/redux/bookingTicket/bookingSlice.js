@@ -1,23 +1,21 @@
 import { createSlice ,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Define an initial state for the booking slice
-// This state will hold the bookings data
 const initialState = {
   bookings: [],
   loading: false,
   error: null,
 };
-// Create a slice for booking management
+
 export const addBookingServer = createAsyncThunk(
   'booking/addBooking',
   async (bookingData, { rejectWithValue }) => {
     try {
       const response = await axios.post('http://localhost:3000/api/bookings/bookingTicket', bookingData);
       console.log(response.data);      
-      return response.data; // Return the booking data
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data); // Handle error
+      return rejectWithValue(error.response.data); 
     }
   }
 );
@@ -37,17 +35,20 @@ export const addBookingSeat = createAsyncThunk(
   } 
 );
 //get all booking data
-export const getAllBookingData = createAsyncThunk(
-  'booking/getAllBookingData',
+export const getAllData = createAsyncThunk(
+  'booking/getAllData',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get('http://localhost:3000/api/bookings/bookingTicket');
+      
+      
       return response.data; // Return the bookings data
     } catch (error) {
       return rejectWithValue(error.response.data); // Handle error
     }
   }
 );  
+
 
 const bookingSlice = createSlice({
     name: "booking",
@@ -67,15 +68,17 @@ const bookingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getAllBookingData.pending, (state) => {
+      .addCase(getAllData.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getAllBookingData.fulfilled, (state, action) => {
+      .addCase(getAllData.fulfilled, (state, action) => {
         state.loading = false;
+        console.log(action.payload);
+        
         state.bookings = action.payload; 
       })
-      .addCase(getAllBookingData.rejected, (state, action) => {
+      .addCase(getAllData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

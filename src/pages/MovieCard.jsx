@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate()
-
+  
   return (
     <div className="bg-gray-800 rounded-xl p-3 mb-4">
       <div className="bg-gray-700 h-40 rounded-lg mb-3 flex items-center justify-center">

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 const backroundImage = "src/assets/backgroundImage.png"
 const Navbar = () => {
   const SignedIn = true; // This should be replaced with actual authentication logic
+
   const userData = [
     {
       userId: "user123456",

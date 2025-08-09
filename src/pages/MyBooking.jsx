@@ -1,36 +1,12 @@
-import React from "react";
-import { useEffect } from "react";
-
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-const bookings = [
-    {
-      id: 1,
-      title: "Alita Battle Angel 2024",
-      duration: "2 hours 5 minutes",
-      dateTime: "13th May 2025 - 5:00 PM",
-      amount: "₹700",
-      tickets: 2,
-      seats: ["B12", "B13"],
-      image: "https://i.imgur.com/z7bZGZL.jpeg", // Replace with your actual movie image
-      //userId:"3k3jj23dkd32"
-    },
-  {
-    id: 2,
-    title: "Alita Battle Angel 2024",
-    duration: "2 hours 5 minutes",
-    dateTime: "13th May 2025 - 5:00 PM",
-    amount: "₹700",
-    tickets: 2,
-    seats: ["B12", "B13"],
-    image: "https://i.imgur.com/z7bZGZL.jpeg",
-    //userId:"3k3jj23dkd32"
-  },
-];
+import { getAllData } from "../redux/bookingTicket/bookingSlice";
 
 const BookingCard = ({ booking }) => (
   <div className="bg-gradient-to-r from-[#3c0b1f] to-[#1c0e1f] text-white rounded-xl flex p-4 mb-4 shadow-lg w-[50%] ">
     <img
-      src={booking.image}
+      src=
+      {booking.image || "https://via.placeholder.com/150"}
       alt={booking.title}
       className="w-24 h-32 object-cover rounded-md mr-4"
     />
@@ -46,7 +22,7 @@ const BookingCard = ({ booking }) => (
           <p>
             Seat Number:{" "}
             <span className="text-white font-medium">
-              {booking.seats.join(", ")}
+              {booking.bookSeats}
             </span>
           </p>
         </div>
@@ -58,18 +34,25 @@ const BookingCard = ({ booking }) => (
 
 const MyBookings = () => {
   const dispatch = useDispatch();
-  //const bookings = useSelector((state) => state?.booking?.bookings)  Bookings;
+  const bookings = useSelector((state) => state.booking.bookings);
   const loading = useSelector((state) => state.booking.loading);
   const error = useSelector((state) => state.booking.error);
+
+  useEffect(() => {
+    dispatch(getAllData());
+  }, [dispatch]);
+
   if (loading) {
     return <div className="text-white text-center">Loading...</div>;
-  } if (error) {
+  }
+
+  if (error) {
     return <div className="text-red-500 text-center">Error: {error}</div>;
   }
-  if (bookings.length === 0) {
+
+  if (!bookings || bookings.length === 0) {
     return <div className="text-white text-center">No bookings found.</div>;
   }
-  
 
   return (
     <section className="min-h-screen bg-black px-6 py-10">
