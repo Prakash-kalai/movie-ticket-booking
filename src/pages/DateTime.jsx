@@ -34,6 +34,8 @@ const DateTime = ({ id,data }) => {
       time: selectedTime,
       duration: Math.floor(data.runtime / 60)+'h'+ data?.runtime % 60+'m •'+" ",
       title: data?.title || "Unknown Movie",      
+      name:"prakash",
+      email:'jkprakash342@gmail.com'
     };
     console.log(bookingDetails);      
     dispatch(addBookingServer(bookingDetails));    

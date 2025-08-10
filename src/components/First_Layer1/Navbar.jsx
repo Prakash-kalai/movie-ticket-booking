@@ -40,7 +40,8 @@ const Navbar = () => {
         <li>Theatres</li>
         <li>Releases</li>
         <li>
-          <Link to={"/movies/my-booking"}>Favorites</Link>
+          <Link to={"/movies/my-booking"}>
+          My Bookings</Link>
         </li>
       </ul>
       {SignedIn ? (

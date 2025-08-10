@@ -1,5 +1,5 @@
-const domain = import.meta.env.VITE_BACKEND_DOMAIN;
-
+//const domain = import.meta.env.VITE_BACKEND_DOMAIN;
+const domain='localhost:3000'; // Fallback for development
 export const backendUrl = {
     signUp: {
         name: 'signUp',
@@ -8,7 +8,7 @@ export const backendUrl = {
     },
     signIn: {
         name: 'signIn',
-        url: '/api/signin',
+        url: "http://localhost:3000/api/signin",
         method: 'POST'
     },
     signOut: {
@@ -41,7 +41,7 @@ export const backendUrl = {
         url: '/api/user/change-password',
         method: 'PUT'
     },
-    verifyEmail: {
+    verifyEmail: {  
         name: 'verifyEmail',
         url: '/api/user/verify-email',
         method: 'POST'

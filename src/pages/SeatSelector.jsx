@@ -3,8 +3,9 @@ import Seat from "./Seat"; // Component shown below
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { addBookingSeat } from "../redux/bookingTicket/bookingSlice";
-
+import { useNavigate } from "react-router-dom";
 const SeatSelector = () => {
+  const navigator = useNavigate();
   const { id } = useParams();    
   const timings = ["06:30", "09:30", "12:00", "16:30", "20:00"];
   const dispatch = useDispatch();
@@ -28,7 +29,9 @@ const SeatSelector = () => {
       alert("Please select at least one seat.");
       return;
     }        
-    dispatch(addBookingSeat({id,selectedSeats}));
+    const data={id:id,seates:selectedSeats}
+    dispatch(addBookingSeat(data));
+    navigator("/movies/my-booking");
     setSelectedSeats([]);
   };
 console.log(data);

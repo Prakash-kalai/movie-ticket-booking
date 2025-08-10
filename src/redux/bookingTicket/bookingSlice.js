@@ -22,12 +22,11 @@ export const addBookingServer = createAsyncThunk(
 
 export const addBookingSeat = createAsyncThunk(
   'booking/addBookingSeat',
-  async ({id,seat}, { rejectWithValue }) => {
+  async (seat, { rejectWithValue }) => {
     try {
       console.log(seat);
       
-      const response = await axios.post(`http://localhost:3000/api/bookings/bookingTicket/${id}`,seat);
-      console.log(response.data);      
+      const response = await axios.post(`http://localhost:3000/api/bookings/bookingTicket/${seat?.id}`,seat?.seates);      
       return response.data; // Return the booking data
     } catch (error) {
       return rejectWithValue(error.response.data); // Handle error
