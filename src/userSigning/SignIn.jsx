@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleLogin = (e) => {
+  const navigator=useNavigate();
+  const handleLogin =async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", email, password);
-    // Add authentication logic here
+    const data={
+      email:email,password:password}
+     const isLogin=await axios.post("http://localhost:3000/api/signin/login",data);
+     if(isLogin.statusText=="ok"){
+      navigator("/");
+     }
+     
+     
   };
-
-  const handleGoogleLogin = () => {
-    console.log("Logging in with Google");
-    // Add Firebase Google sign-in logic here
+  
+  const handleGoogleLogin = async() => {
+    
   };
 
   return (
