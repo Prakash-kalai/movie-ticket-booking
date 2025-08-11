@@ -21,6 +21,17 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
+export const resetSignup = createAsyncThunk(async(data,{rejectWithValue})=>{
+  try{
+    const data=await axios.get(backendUrl.signUp.url);
+    return data.data;
+  }catch(error){
+    return rejectWithValue(error.response?.data || "Reset signup failed");
+  }
+
+});
+
+
 // Redux slice
 const signSlice = createSlice({
   name: 'signUp',
@@ -40,6 +51,7 @@ const signSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
+      
   }
 });
 
