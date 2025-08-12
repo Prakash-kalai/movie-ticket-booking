@@ -2,25 +2,54 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { isLoginCheck } from "../redux/signUp/loginSlice";
+
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigator=useNavigate();
-  const handleLogin =async (e) => {
-    e.preventDefault();
-    const data={
-      email:email,password:password}
-     const isLogin=await axios.post("http://localhost:3000/api/signin/login",data);
-     if(isLogin.statusText=="ok"){
+  const navigator = useNavigate();
+  const dispatch = useDispatch();
+
+  const isLogin = useSelector((state) => state.login.isLogin);
+  const userData = useSelector((state) => state.login.userData);
+  const error = useSelector((state) => state.login.error);
+
+  const data = { email, password };
+
+  useEffect(() => {
+    if (isLogin) {
       navigator("/");
-     }
-     
-     
+    }
+  }, [isLogin, navigator]);
+
+  useEffect(() => {
+    if (userData) {
+      console.log("User Data:", userData);
+    }
+    if (error) {
+      console.error("Login Error:", error);
+    }
+  }, [userData, error]);
+
+  useEffect(() => {
+    dispatch(isLoginCheck());
+  }, [dispatch]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const data = {
+      email: email,
+      password: password,
+    };
+    dispatch(isLoginCheck(data));
   };
-  
-  const handleGoogleLogin = async() => {
-    
+
+  const handleGoogleLogin = async () => {
+    // Google login logic (not implemented)
   };
+
+  console.log(userData);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-purple-900">

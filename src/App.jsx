@@ -20,7 +20,7 @@ const App = () => {
   return (
     <BrowserRouter>
     <div>
-      {!isLogin ? (
+      {isLogin ? (
       <div className='bg-black'>            
       <Navbar/>
         <Routes>
