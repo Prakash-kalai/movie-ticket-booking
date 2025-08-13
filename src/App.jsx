@@ -10,13 +10,18 @@ import MyBookings from './pages/MyBooking'
 import { useDispatch, useSelector } from 'react-redux'
 import SignIn from './userSigning/SignIn'
 import SignUp from './userSigning/SignUp'
-
+import { isLoginCheck } from './redux/signUp/loginSlice'
 
 const App = () => {
   const dispatch=useDispatch()
   const data=useSelector((state)=>state.booking.bookings)
-  console.log(data);
-  const isLogin=false;
+  const isLogin = useSelector((state) => state.login.isLogin);
+  console.log(isLogin);
+  
+  useEffect(() => {
+    dispatch(isLoginCheck());
+  }, [dispatch]);
+  console.log(data);  
   return (
     <BrowserRouter>
     <div>

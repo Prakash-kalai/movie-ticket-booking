@@ -1,21 +1,45 @@
-import React, { useEffect, useState } from "react";
-import Seat from "./Seat"; // Component shown below
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { addBookingSeat } from "../redux/bookingTicket/bookingSlice";
-import { useNavigate } from "react-router-dom";
-const SeatSelector = () => {
-  const navigator = useNavigate();
-  const { id } = useParams();    
-  const timings = ["06:30", "09:30", "12:00", "16:30", "20:00"];
-  const dispatch = useDispatch();
-  const data = useSelector((state) => state.booking.bookings);
+import { useParams, useNavigate } from "react-router-dom";
+import Seat from "./Seat";
+import { addBookingSeat, getAllData } from "../redux/bookingTicket/bookingSlice";
 
+const SeatSelector = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const timings = ["6:30", "8:30", "12:00", "16:30", "20:00"];
   const [selectedTime, setSelectedTime] = useState(timings[0]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [seates,setSeates] = useState([]);
+
+  const bookings = useSelector((state) => state.booking.bookings);
   const rows = ["A", "B", "C", "D", "E", "F", "G"];
   const cols = 18;
 
+  useEffect(() => {
+    dispatch(getAllData());
+  }, [dispatch]);
+
+  // ✅ Get all booked seats for this movie and time
+  const bookedSeats =
+    bookings
+      ?.filter((b) => b.movieId === id && b.showTime === selectedTime)
+      ?.flatMap((b) => b.bookedSeats) || [];
+  
+  
+  const handleTimeSelect = (time) => {
+    const existingSeats = bookings
+      .find((b) => b.movieId === id && b.showTime == time)
+      ?.bookedSeats || [];
+    setSeates(existingSeats);
+    setSelectedTime(time);
+    setSelectedSeats([]); // Clear selected seats when changing time
+  };
+
+  
+  
   const toggleSeat = (seatId) => {
     setSelectedSeats((prev) =>
       prev.includes(seatId)
@@ -28,15 +52,19 @@ const SeatSelector = () => {
     if (selectedSeats.length === 0) {
       alert("Please select at least one seat.");
       return;
-    }        
-    const data={id:id,seates:selectedSeats}
-    dispatch(addBookingSeat(data));
-    navigator("/movies/my-booking");
+    }
+
+    dispatch(
+      addBookingSeat({
+        movieId: id,
+        showTime: selectedTime,
+        bookedSeats: selectedSeats,
+      })
+    );
+
+    navigate("/movies/my-booking");
     setSelectedSeats([]);
   };
-console.log(data);
-
-  const bookedSeats = data?.bookedSeats || [];
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
@@ -47,7 +75,7 @@ console.log(data);
           {timings.map((time) => (
             <div
               key={time}
-              onClick={() => setSelectedTime(time)}
+              onClick={() => handleTimeSelect(time)}
               className={`mb-2 px-3 py-1 rounded-md cursor-pointer text-sm ${
                 selectedTime === time
                   ? "bg-pink-500 text-white"
@@ -62,7 +90,7 @@ console.log(data);
           ))}
         </div>
 
-        {/* Seat layout */}
+        {/* Seat Layout */}
         <div className="flex-1 text-center">
           <h2 className="text-lg font-semibold mb-2">Select Your Seat</h2>
           <div className="text-[10px] mb-4">SCREEN SIDE</div>
@@ -73,13 +101,14 @@ console.log(data);
                 <span className="w-4 text-xs">{row}</span>
                 {Array.from({ length: cols }).map((_, colIndex) => {
                   const seatId = `${row}${colIndex + 1}`;
-                  const isBooked = bookedSeats?.includes(seatId);
+                  const isBooked = bookedSeats.includes(seatId);
+
                   return (
                     <Seat
                       key={seatId}
                       seatId={seatId}
-                      selected={selectedSeats?.includes(seatId)}
-                      disabled={isBooked}
+                      isBooked={isBooked}
+                      selected={selectedSeats.includes(seatId) || seates.includes(seatId)}
                       onClick={() => !isBooked && toggleSeat(seatId)}
                     />
                   );
