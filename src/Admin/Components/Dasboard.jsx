@@ -40,7 +40,7 @@ const activeMovies = [
 
 export default function AdminDashboard() {
   return (
-    <div className="flex min-h-screen bg-black text-white">      
+    <div className="flex min-h-screen  text-white">      
       <div className="flex-1 px-10 py-6">
         <h1 className="text-3xl font-bold text-white">
           Admin <span className="text-pink-500">Dashboard</span>

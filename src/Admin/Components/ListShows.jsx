@@ -32,7 +32,7 @@ const showData = [
 const ListShows = () => {
   return (
     <div className="w-full">      
-      <div className="flex-1 p-10 min-h-screen bg-black text-white ">
+      <div className="flex-1 p-10 min-h-screen  text-white ">
         <h1 className="text-3xl font-bold mb-6">
           List <span className="text-pink-500">Shows</span>
         </h1>

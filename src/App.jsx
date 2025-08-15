@@ -16,6 +16,7 @@ import SignUp from './userSigning/SignUp';
 import Appadmin from './Admin/Appadmin';
 
 import { isLoginCheck } from './redux/signUp/loginSlice';
+import Hero from './Admin/Components/Hero';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const App = () => {
         {/* Public Auth Routes */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/hero" element={<Hero />} />
 
         {/* Admin Section */}
         <Route path="/admin/*" element={<Appadmin />} />
