@@ -5,6 +5,7 @@ import { Sidebar } from './Components/Sidebar'
 import AddShows from './Components/AddShows'
 import ListShows from './Components/ListShows'
 import ListBookings from './Components/ListBookings'
+import All_movies from './Components/All_movies'
 const Appadmin = () => {
   return (
     <div className=' min-h-screen bg-black text-white w-[100%]'>
@@ -19,6 +20,7 @@ const Appadmin = () => {
             <Route path="/add-shows" element={<AddShows />} />
             <Route path="/list-shows" element={<ListShows/>} />
             <Route path="/list-bookings" element={<ListBookings />} />
+            <Route path="/list-movies" element={<All_movies />} />
         </Routes>
     </div>
     </div>

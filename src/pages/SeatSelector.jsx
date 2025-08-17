@@ -108,7 +108,7 @@ const SeatSelector = () => {
                       key={seatId}
                       seatId={seatId}
                       isBooked={isBooked}
-                      selected={selectedSeats.includes(seatId) || seates.includes(seatId)}
+                        selected={selectedSeats.includes(seatId) || seates.includes(seatId)}
                       onClick={() => !isBooked && toggleSeat(seatId)}
                     />
                   );
