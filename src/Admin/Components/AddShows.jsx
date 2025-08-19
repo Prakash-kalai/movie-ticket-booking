@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { dummyShowsData } from "../../assets/assets";
 const AddShows = () => {
-  const [selectedMoveie, setSelectedMovie] = useState(null);
+  const [selectedMoveie, setSelectedMovie] = useState(null);  
   const [formData, setFormData] = useState({
     movieName: "",
     poster: null, // image file
@@ -72,7 +72,13 @@ const AddShows = () => {
       <div className="max-w-full overflow-x-auto no-scrollbar flex gap-4 ">
         {dummyShowsData.map((show) => (
           <div key={show.id} className="min-w-[250px] brightness-60  hover:brightness-100 transition-opacity duration-300"
-          onClick={() => setSelectedMovie(show.id)}
+          onClick={() => {
+  setSelectedMovie(show.id);
+  setFormData((prev) => ({ ...prev, movieName: show.title }));
+  setFormData((prev) => ({ ...prev, language: show.original_language }));
+  
+  
+          }}
           >
             <img
               src={show.poster_path}
@@ -112,23 +118,13 @@ const AddShows = () => {
             required
           />
         </div>
-
-        <div>
-          <label className="block text-sm mb-1">Poster (optional)</label>
-          <input
-            type="file"
-            name="poster"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-          />
-        </div>
-
+        
+  
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm mb-1">Date</label>
             <input
-               type="datetime-local"
+               type="date"
               name="date"
               value={formData.date}
               onChange={handleChange}
