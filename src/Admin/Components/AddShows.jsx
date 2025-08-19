@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { dummyShowsData } from "../../assets/assets";
 const AddShows = () => {
+  const [selectedMoveie, setSelectedMovie] = useState(null);
   const [formData, setFormData] = useState({
     movieName: "",
     poster: null, // image file
@@ -29,7 +30,7 @@ const AddShows = () => {
 
     try {
       const form = new FormData();
-      form.append("movieName", formData.movieName);
+      form.append("movieName", formData.selectedMoveie);
       form.append("date", formData.date);
       form.append("time", formData.time);
       form.append("price", formData.price);
@@ -49,7 +50,7 @@ const AddShows = () => {
       // Reset
       setFormData({
         movieName: "",
-        poster: null,
+        poster: "",
         date: "",
         time: "",
         price: "",
@@ -64,11 +65,37 @@ const AddShows = () => {
     }
   };
 
-  return (
-    <div className="flex justify-center items-start p-10 min-h-screen bg-black text-white">
+  return (     
+    <div className="w-full flex flex-col justify-center  p-10 min-h-screen gap-10 text-white overflow-hidden">
+
+      {/* Horizontally scrollable poster list */}
+      <div className="max-w-full overflow-x-auto no-scrollbar flex gap-4 ">
+        {dummyShowsData.map((show) => (
+          <div key={show.id} className="min-w-[250px] brightness-60  hover:brightness-100 transition-opacity duration-300"
+          onClick={() => setSelectedMovie(show.id)}
+          >
+            <img
+              src={show.poster_path}
+              alt={show.showName}
+              className="w-full h-48 object-cover rounded-lg mb-2"
+            />
+            <h3 className="text-xl font-semibold">{show.title}</h3>
+            <p className="text-gray-400">{show.vote_count}</p>
+            <p className="text-gray-400">{show.vote_average}</p>
+            <div className="flex items-center justify-between absolute top-1 left-2 right-2 ">
+              {selectedMoveie === show.id && (
+                <input type="checkbox" className="mt-2 w-5 h-5" checked={selectedMoveie === show.id} readOnly />  
+
+              )}
+              </div>                  
+            </div>
+        ))}
+      </div>
+
+      {/* Form Section */}
       <form
         onSubmit={handleSubmit}
-        className="bg-[#1b1b1b] p-6 rounded-lg w-full max-w-lg space-y-5"
+        className="p-6 rounded-lg w-full bg-gray-900 max-w-lg space-y-5"
       >
         <h2 className="text-2xl font-bold text-center text-pink-500">
           Add New Show
@@ -101,7 +128,7 @@ const AddShows = () => {
           <div>
             <label className="block text-sm mb-1">Date</label>
             <input
-              type="date"
+               type="datetime-local"
               name="date"
               value={formData.date}
               onChange={handleChange}
@@ -170,5 +197,6 @@ const AddShows = () => {
     </div>
   );
 };
+
 
 export default AddShows;
