@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { dummyShowsData } from "../../assets/assets";
+
 const AddShows = () => {
-  const [selectedMoveie, setSelectedMovie] = useState(null);  
+  const [selectedMoveie, setSelectedMovie] = useState(null);
+  const [selectdateTime, setSelectdateTime] = useState([]);
+
   const [formData, setFormData] = useState({
     movieName: "",
-    poster: null, // image file
+    poster: null,
     date: "",
     time: "",
     price: "",
     language: "",
     theater: "",
   });
+
+  const handleDate = (date) => {
+    const [dates, time] = date.split("T");        // ✅ fixed
+    return { dates, time };
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -30,9 +38,9 @@ const AddShows = () => {
 
     try {
       const form = new FormData();
-      form.append("movieName", formData.selectedMoveie);
+      form.append("movieName", formData.movieName);
       form.append("date", formData.date);
-      form.append("time", formData.time);
+      form.append("time", formData.selectdateTime);
       form.append("price", formData.price);
       form.append("language", formData.language);
       form.append("theater", formData.theater);
@@ -40,9 +48,11 @@ const AddShows = () => {
         form.append("poster", formData.poster);
       }
 
-      const res = await axios.post("http://localhost:3000/api/admin/add-show", form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        "http://localhost:3000/api/admin/add-show",
+        form,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
 
       alert("Show added successfully!");
       console.log("Response:", res.data);
@@ -57,6 +67,7 @@ const AddShows = () => {
         language: "",
         theater: "",
       });
+      setSelectdateTime([]);
     } catch (error) {
       console.error("Upload failed", error);
       alert("Failed to add show.");
@@ -65,20 +76,22 @@ const AddShows = () => {
     }
   };
 
-  return (     
-    <div className="w-full flex flex-col justify-center  p-10 min-h-screen gap-10 text-white overflow-hidden">
-
-      {/* Horizontally scrollable poster list */}
+  return (
+    <div className="w-full flex flex-col justify-center p-10 min-h-screen gap-10 text-white overflow-hidden">
+      
       <div className="max-w-full overflow-x-auto no-scrollbar flex gap-4 ">
         {dummyShowsData.map((show) => (
-          <div key={show.id} className="min-w-[250px] brightness-60  hover:brightness-100 transition-opacity duration-300"
-          onClick={() => {
-  setSelectedMovie(show.id);
-  setFormData((prev) => ({ ...prev, movieName: show.title }));
-  setFormData((prev) => ({ ...prev, language: show.original_language }));
-  
-  
-          }}
+          <div
+            key={show.id}
+            className="min-w-[250px] brightness-60 hover:brightness-100 transition-opacity duration-300"
+            onClick={() => {
+              setFormData((prev) => ({
+                ...prev,movieName: show.title,}));
+
+              setSelectdateTime((prev) =>
+                formData.date ? [...prev, formData.date] : prev
+              );
+            }}
           >
             <img
               src={show.poster_path}
@@ -90,15 +103,19 @@ const AddShows = () => {
             <p className="text-gray-400">{show.vote_average}</p>
             <div className="flex items-center justify-between absolute top-1 left-2 right-2 ">
               {selectedMoveie === show.id && (
-                <input type="checkbox" className="mt-2 w-5 h-5" checked={selectedMoveie === show.id} readOnly />  
-
+                <input
+                  type="checkbox"
+                  className="mt-2 w-5 h-5"
+                  checked={selectedMoveie === show.id}
+                  readOnly
+                />
               )}
-              </div>                  
             </div>
+          </div>
         ))}
       </div>
 
-      {/* Form Section */}
+      {/* Form */}
       <form
         onSubmit={handleSubmit}
         className="p-6 rounded-lg w-full bg-gray-900 max-w-lg space-y-5"
@@ -115,70 +132,67 @@ const AddShows = () => {
             value={formData.movieName}
             onChange={handleChange}
             className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-            required
           />
         </div>
-        
-  
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1">Date</label>
+
+        <div className="flex gap-1">
+          <div className="w-1/2 mr-2">
+            <label className="block text-sm mb-1">Date & Time</label>
             <input
-               type="date"
+              type="datetime-local"
               name="date"
               value={formData.date}
               onChange={handleChange}
               className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-              required
             />
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Time</label>
-            <input
-              type="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-              required
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1">Price</label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-              required
-            />
+            <button
+              type="button"
+              className="mt-2 bg-pink-600 px-4 py-1 rounded"
+              onClick={() => {
+                if (formData.date) {
+                  setSelectdateTime((prev) => [...prev, formData.date]);
+                  setFormData((prev) => ({ ...prev, date: "" }));
+                }
+              }}
+            >
+              Add
+            </button>
           </div>
-          <div>
-            <label className="block text-sm mb-1">Language</label>
-            <input
-              type="text"
-              name="language"
-              value={formData.language}
-              onChange={handleChange}
-              className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-              required
-            />
+
+          <div className="w-1/2 ml-2">
+            {selectdateTime.map((date, index) => {
+              const { dates, time } = handleDate(date);
+              return (
+                <div key={index} className="mb-2">
+                  <p className="text-sm text-amber-50">
+                    {dates} at {time}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm mb-1">Theater</label>
+          <label className="block text-sm mb-1">Price</label>
           <input
-            type="text"
-            name="theater"
-            value={formData.theater}
+            type="number"
+            name="price"
+            value={formData.price}
             onChange={handleChange}
             className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
-            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm mb-1">Language</label>
+          <input
+            type="text"
+            name="language"
+            value={formData.language}
+            onChange={handleChange}
+            className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           />
         </div>
 
@@ -193,6 +207,5 @@ const AddShows = () => {
     </div>
   );
 };
-
 
 export default AddShows;
