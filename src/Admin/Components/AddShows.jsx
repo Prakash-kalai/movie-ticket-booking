@@ -5,8 +5,9 @@ import { dummyShowsData } from "../../assets/assets";
 const AddShows = () => {
   const [selectedMoveie, setSelectedMovie] = useState(null);
   const [selectdateTime, setSelectdateTime] = useState([]);
-
+  const [movieId,setMovieId] = useState(null);
   const [formData, setFormData] = useState({
+    movieId: movieId,
     movieName: "",
     poster: null,
     date: "",
@@ -17,7 +18,9 @@ const AddShows = () => {
   });
 
   const handleDate = (date) => {
-    const [dates, time] = date.split("T");        // ✅ fixed
+    const [dates, time] = date.split("T");        // ✅ fixed                
+    formData.date = dates; // Update formData with the date part
+    formData.time = time; // Update formData with the time part
     return { dates, time };
   };
 
@@ -38,12 +41,12 @@ const AddShows = () => {
 
     try {
       const form = new FormData();
+      form.append("movieId", formData.movieId);
       form.append("movieName", formData.movieName);
       form.append("date", formData.date);
-      form.append("time", formData.selectdateTime);
+      form.append("time", formData.time);            
       form.append("price", formData.price);
-      form.append("language", formData.language);
-      form.append("theater", formData.theater);
+      form.append("language", formData.language);      
       if (formData.poster) {
         form.append("poster", formData.poster);
       }
@@ -87,7 +90,7 @@ const AddShows = () => {
             onClick={() => {
               setFormData((prev) => ({
                 ...prev,movieName: show.title,}));
-
+              setSelectedMovie(show.id);
               setSelectdateTime((prev) =>
                 formData.date ? [...prev, formData.date] : prev
               );
