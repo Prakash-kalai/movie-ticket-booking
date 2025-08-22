@@ -7,20 +7,17 @@ const AddShows = () => {
   const [selectdateTime, setSelectdateTime] = useState([]);
   const [movieId,setMovieId] = useState(null);
   const [formData, setFormData] = useState({
-    movieId: movieId,
-    movieName: "",
-    poster: null,
-    date: "",
-    time: "",
+    movieId:'',
+    movieName: "",    
+    dateTime: [],    
     price: "",
-    language: "",
-    theater: "",
+    language: "",    
   });
 
   const handleDate = (date) => {
-    const [dates, time] = date.split("T");        // ✅ fixed                
-    formData.date = dates; // Update formData with the date part
-    formData.time = time; // Update formData with the time part
+    const [dates, time] = date.split("T");     
+    formData.date = dates; 
+    formData.time = time; 
     return { dates, time };
   };
 
@@ -34,22 +31,21 @@ const AddShows = () => {
   const handleFileChange = (e) => {
     setFormData((prev) => ({ ...prev, poster: e.target.files[0] }));
   };
-
+  console.log(movieId);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       const form = new FormData();
-      form.append("movieId", formData.movieId);
+      form.append("movieId", movieId);
       form.append("movieName", formData.movieName);
-      form.append("date", formData.date);
-      form.append("time", formData.time);            
+      form.append("date", formData.dateTime.append(selectdateTime));      
       form.append("price", formData.price);
       form.append("language", formData.language);      
-      if (formData.poster) {
-        form.append("poster", formData.poster);
-      }
+        console.log(form);
+        
 
       const res = await axios.post(
         "http://localhost:3000/api/admin/add-show",
@@ -62,10 +58,8 @@ const AddShows = () => {
 
       // Reset
       setFormData({
-        movieName: "",
-        poster: "",
-        date: "",
-        time: "",
+        movieName: "",        
+        dateTime: [],        
         price: "",
         language: "",
         theater: "",
@@ -90,7 +84,7 @@ const AddShows = () => {
             onClick={() => {
               setFormData((prev) => ({
                 ...prev,movieName: show.title,}));
-              setSelectedMovie(show.id);
+              setMovieId(show.id);
               setSelectdateTime((prev) =>
                 formData.date ? [...prev, formData.date] : prev
               );
