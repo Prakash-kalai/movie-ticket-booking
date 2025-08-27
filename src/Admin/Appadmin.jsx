@@ -14,7 +14,10 @@ const Appadmin = () => {
       </div>
       <hr/>
       <div className='flex w-full bg-gradient-to-r from-[#100c0e] to-[#3f0b2c]'>
+        <div className='overflow-hidden'>
       <Sidebar/>        
+      </div>
+      <div className='p-5 w-full overflow-auto'>
         <Routes>
             <Route path="/" element={<Dasboard />} /> || <Route path="/dashboard" element={<Dasboard />} /> 
             <Route path="/add-shows" element={<AddShows />} />
@@ -22,6 +25,7 @@ const Appadmin = () => {
             <Route path="/list-bookings" element={<ListBookings />} />
             <Route path="/list-movies" element={<All_movies />} />
         </Routes>
+    </div>
     </div>
     </div>
   )

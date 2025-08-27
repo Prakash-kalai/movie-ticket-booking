@@ -3,36 +3,40 @@ import axios from "axios";
 import { dummyShowsData } from "../../assets/assets";
 
 const AddShows = () => {
-  const [selectedMoveie, setSelectedMovie] = useState(null);
-  const [selectdateTime, setSelectdateTime] = useState([]);
-  const [movieId,setMovieId] = useState(null);
-  const [formData, setFormData] = useState({
-    movieId:'',
-    movieName: "",    
-    dateTime: [],    
-    price: "",
-    language: "",    
-  });
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [selectdateTime, setSelectdateTime] = useState([]); // multiple dates
+  const [movieId, setMovieId] = useState(null);
 
-  const handleDate = (date) => {
-    const [dates, time] = date.split("T");     
-    formData.date = dates; 
-    formData.time = time; 
-    return { dates, time };
-  };
+  const [formData, setFormData] = useState({
+    movieName: "",
+    date: "",
+    price: "",
+    language: "",
+  });
 
   const [loading, setLoading] = useState(false);
 
+  // Format date
+  const handleDate = (date) => {
+    const [dates, time] = date.split("T");
+    return { dates, time };
+  };
+
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, poster: e.target.files[0] }));
+  // Add a date/time to list
+  const addDateTime = () => {
+    if (formData.date) {
+      setSelectdateTime((prev) => [...prev, formData.date]);
+      setFormData((prev) => ({ ...prev, date: "" })); // reset date input
+    }
   };
-  console.log(movieId);
-  
+
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -41,11 +45,9 @@ const AddShows = () => {
       const form = new FormData();
       form.append("movieId", movieId);
       form.append("movieName", formData.movieName);
-      form.append("date", formData.dateTime.append(selectdateTime));      
+      form.append("dateTime", JSON.stringify(selectdateTime)); // send full array
       form.append("price", formData.price);
-      form.append("language", formData.language);      
-        console.log(form);
-        
+      form.append("language", formData.language);
 
       const res = await axios.post(
         "http://localhost:3000/api/admin/add-show",
@@ -58,13 +60,14 @@ const AddShows = () => {
 
       // Reset
       setFormData({
-        movieName: "",        
-        dateTime: [],        
+        movieName: "",
+        date: "",
         price: "",
         language: "",
-        theater: "",
       });
       setSelectdateTime([]);
+      setSelectedMovie(null);
+      setMovieId(null);
     } catch (error) {
       console.error("Upload failed", error);
       alert("Failed to add show.");
@@ -76,18 +79,18 @@ const AddShows = () => {
   return (
     <div className="w-full flex flex-col justify-center p-10 min-h-screen gap-10 text-white overflow-hidden">
       
+      {/* Movie selection */}
       <div className="max-w-full overflow-x-auto no-scrollbar flex gap-4 ">
         {dummyShowsData.map((show) => (
           <div
             key={show.id}
-            className="min-w-[250px] brightness-60 hover:brightness-100 transition-opacity duration-300"
+            className={`min-w-[250px] cursor-pointer brightness-60 hover:brightness-100 transition-opacity duration-300 p-2 rounded-lg ${
+              selectedMovie === show.id ? "ring-2 ring-pink-500" : ""
+            }`}
             onClick={() => {
-              setFormData((prev) => ({
-                ...prev,movieName: show.title,}));
+              setFormData((prev) => ({ ...prev, movieName: show.title }));
               setMovieId(show.id);
-              setSelectdateTime((prev) =>
-                formData.date ? [...prev, formData.date] : prev
-              );
+              setSelectedMovie(show.id);
             }}
           >
             <img
@@ -98,16 +101,6 @@ const AddShows = () => {
             <h3 className="text-xl font-semibold">{show.title}</h3>
             <p className="text-gray-400">{show.vote_count}</p>
             <p className="text-gray-400">{show.vote_average}</p>
-            <div className="flex items-center justify-between absolute top-1 left-2 right-2 ">
-              {selectedMoveie === show.id && (
-                <input
-                  type="checkbox"
-                  className="mt-2 w-5 h-5"
-                  checked={selectedMoveie === show.id}
-                  readOnly
-                />
-              )}
-            </div>
           </div>
         ))}
       </div>
@@ -128,10 +121,12 @@ const AddShows = () => {
             name="movieName"
             value={formData.movieName}
             onChange={handleChange}
+            readOnly
             className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           />
         </div>
 
+        {/* Date & Time */}
         <div className="flex gap-1">
           <div className="w-1/2 mr-2">
             <label className="block text-sm mb-1">Date & Time</label>
@@ -146,25 +141,35 @@ const AddShows = () => {
             <button
               type="button"
               className="mt-2 bg-pink-600 px-4 py-1 rounded"
-              onClick={() => {
-                if (formData.date) {
-                  setSelectdateTime((prev) => [...prev, formData.date]);
-                  setFormData((prev) => ({ ...prev, date: "" }));
-                }
-              }}
+              onClick={addDateTime}
             >
               Add
             </button>
           </div>
 
+          {/* Show Added Dates */}
           <div className="w-1/2 ml-2">
             {selectdateTime.map((date, index) => {
               const { dates, time } = handleDate(date);
               return (
-                <div key={index} className="mb-2">
+                <div
+                  key={index}
+                  className="mb-2 flex justify-between items-center"
+                >
                   <p className="text-sm text-amber-50">
                     {dates} at {time}
                   </p>
+                  <button
+                    type="button"
+                    className="text-red-500 text-xs"
+                    onClick={() =>
+                      setSelectdateTime((prev) =>
+                        prev.filter((_, i) => i !== index)
+                      )
+                    }
+                  >
+                    Remove
+                  </button>
                 </div>
               );
             })}
