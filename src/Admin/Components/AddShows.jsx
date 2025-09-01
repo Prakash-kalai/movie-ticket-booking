@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import axios from "axios";
 import { dummyShowsData } from "../../assets/assets";
-import { se } from "date-fns/locale";
 const API_BASE = "http://localhost:3000"; // change if needed
 
 export default function AddShows() {
@@ -73,6 +72,7 @@ export default function AddShows() {
   }, [form, posterFile, submitting]);
 
   const handleSubmit = async (e) => {
+    console.log('fda');    
     e.preventDefault();
     setSubmitting(true);
     setMessage("");
@@ -81,8 +81,7 @@ export default function AddShows() {
    
       const payload = {
         movieId: form.movieId.trim(),
-        movieName: form.movieName.trim(),
-        poster: poster,
+        movieName: form.movieName.trim(),        
         language: form.language.trim(),
         theatre: form.theatre.trim(),
         screen: form.screen.trim(),
@@ -152,7 +151,7 @@ export default function AddShows() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-6 items-start">
+        <form onSubmit={(e)=>handleSubmit(e)} className="grid md:grid-cols-3 gap-6 items-start">
           {/* Poster */}
           <div className="md:col-span-1">
             <div className="bg-gray-800 rounded-2xl p-4 shadow">
@@ -312,7 +311,7 @@ export default function AddShows() {
               <div className="flex items-center gap-3 pt-2">
                 <button
                   type="submit"
-                  disabled={!canSubmit}
+                  
                   className="px-6 py-2 rounded-2xl bg-green-600 hover:bg-green-500 disabled:bg-gray-700"
                 >
                   {submitting ? "Saving..." : "Create Show"}
